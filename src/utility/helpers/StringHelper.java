@@ -1,4 +1,4 @@
-package utility;
+package utility.helpers;
 
 import java.util.regex.Pattern;
 
@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 /**
  * 
  * @author vicenteaguilera
+ * @author salvadormorado
+ * @author antonio pulido
+ * @author samuelbenitez
  */
 
 public class StringHelper 

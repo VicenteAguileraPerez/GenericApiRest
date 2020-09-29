@@ -1,4 +1,4 @@
-package utility;
+package utility.helpers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +18,9 @@ import org.json.JSONObject;
 /**
  * 
  * @author vicenteaguilera
+ * @author salvadormorado
+ * @author antonio pulido
+ * @author samuelbenitez
  */
 
 

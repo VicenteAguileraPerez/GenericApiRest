@@ -1,4 +1,4 @@
-package utility;
+package utility.helpers;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,6 +11,9 @@ import org.json.JSONObject;
 /**
  * 
  * @author vicenteaguilera
+ * @author salvadormorado
+ * @author antonio pulido
+ * @author samuelbenitez
  */
 
 public class JSONHelper 

@@ -1,6 +1,11 @@
-package utility;
+package utility.helpers;
 
-
+/**
+ * @author vicenteaguilera
+ * @author salvadormorado
+ * @author antonio pulido
+ * @author samuelbenitez
+ */
 import java.nio.charset.StandardCharsets;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
