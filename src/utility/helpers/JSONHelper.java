@@ -243,14 +243,15 @@ public class JSONHelper
   		JSONArray jsonArrayFilter = new JSONArray();
   		
   		defaultData.forEach(item->{
-  			
+  		
   			if(item.toString().contains(data))
   			{
   				if(keyFilter!=null)
   	  			{
-  	  				
+  						
   	  		   			JSONObject jsonObject = (JSONObject) item;
-  	  		   			if(jsonObject.getString(keyFilter).equals("true"))
+  	  		   			
+  	  		   			if(jsonObject.getString(keyFilter).equals(data))
   	  		   			{
   	  		   				jsonArrayFilter.put(item);
   	  		   			}
@@ -258,9 +259,8 @@ public class JSONHelper
   	  			}
   	  			else
   	  			{
-
-  	  		   			
-  	  			jsonArrayFilter.put(item);
+	
+  	  				jsonArrayFilter.put(item);
   	  		   			
   	  			}
   					

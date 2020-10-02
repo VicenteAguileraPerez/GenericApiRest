@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
+import java.util.UUID;
 import javax.swing.JOptionPane;
 
 import org.json.JSONArray;
@@ -30,73 +30,118 @@ public class FilesHelper
 	private final File pathKey;
 	public FilesHelper(String databasename,String keyname) 
 	{
+		//String pathFile = "GenericApiRest//WebContent//WEB-INF//lib//";
 		path= new File(databasename);// la raiz del proyecto;
-		pathKey= new File(keyname);// la raiz del proyecto;
+		
+		if(!keyname.isBlank())
+		{
+			pathKey= new File(keyname);// la raiz del proyecto;
+		}else
+		{
+			pathKey = null;
+		}
 	}
 	
 	public void saveData(String data,boolean mode)
 	{
 		
 		FileWriter writer;
-		try 
-		{
+		
+		try {
+	
+			
 			writer = new FileWriter(path,mode);// si existe el archivo va a escribir si no va a crear
 			writer.write(data);
 			writer.write("\n");
-			writer.close();
+			writer.close();	
+			
 		} 
-		catch (IOException e) 
-		{
-			// TODO Auto-generated catch block
+		catch (IOException e) {
+			
 			e.printStackTrace();
-			System.out.println("me cai");
 		}
+			
 		
 	}
-	public void saveData(JSONObject data)
+	public String saveData(JSONObject data,boolean mode)
+	{
+		
+		FileWriter writer;
+		
+		try {
+			String id = UUID.randomUUID().toString();
+			
+			data.put(StaticHelper.ID,id);
+			writer = new FileWriter(path,mode);// si existe el archivo va a escribir si no va a crear
+			writer.write(data.toString());
+			writer.write("\n");
+			writer.close();	
+			return id;
+			
+		} 
+		catch (IOException e) {
+			return null;
+			
+		}
+			
+		
+	}
+	public String saveData(JSONObject data,String operation)
 	{
 		
 		JSONArray jsonArray = readDataJson();
-		System.out.println("Array"+jsonArray);
-		System.out.println("Array"+data);
+		System.out.println("arreglo"+jsonArray);
 		FileWriter writer;
-		
+		String id = null;
 		try 
 		{
-			writer = new FileWriter(path);// si existe el archivo va a escribir si no va a crear
+			
+			writer = new FileWriter(path);
 			if(jsonArray!=null)
 			{
 				for (int i = 0; i < jsonArray.length(); i++)
 				{
 					
 					    JSONObject jsonObject = jsonArray.getJSONObject(i); 
-						if(jsonObject.getString("id").equals(data.getString("id")))
+						if(jsonObject.getString(StaticHelper.ID).equals(data.getString(StaticHelper.ID)))
 						{
-							writer.write(new EncryptationHelper().encryptAES(data.toString()));
+							
+							//if updating is updating else is deleting
+							if(operation.equals(StaticHelper.UPDATING)) 
+							{
+								
+								writer.write(data.toString());
+								writer.write("\n");
+								//writer.write(new EncryptationHelper().encryptAES(data.toString()));
+							}
+							id=data.getString("id");
+							
 						}
 						else
 						{
-							writer.write(new EncryptationHelper().encryptAES(jsonArray.getJSONObject(i).toString()));
+							writer.write(jsonObject.toString());
+							writer.write("\n");
+							//writer.write(new EncryptationHelper().encryptAES(jsonArray.getJSONObject(i).toString()));
 						}
-						writer.write("\n");
+						
 						
 					}
 				writer.close();
-			
-					
-				}
+			}
+			return id;
 			
 		}
 		
 		catch (IOException e) 
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("me cai");
+			
+			return id;
 		}
 			
 		
 	}
+	
 	public JSONArray readDataJson()
 	{
 	
@@ -114,14 +159,19 @@ public class FilesHelper
 				//asignacion sobre evaluación y si el resultado se esa linea es difernete de null entonces entra al while
 				while((helper=readerB.readLine())!=null)
 				{
+					
 					//System.out.println(helper);
-					EncryptationHelper encryptationHelper=new EncryptationHelper();
-					JSONObject jsonObject = new JSONObject(encryptationHelper.decryptAES(helper));
-					jsonArray.put(jsonObject);
+					//EncryptationHelper encryptationHelper=new EncryptationHelper();
+					//JSONObject jsonObject = new JSONObject(/*encryptationHelper.decryptAES*/(helper));
+					if(helper.isBlank()) 
+						break;
+				
+					JSONHelper jsonObject = new JSONHelper();
+					JSONObject jsonObject2= jsonObject.getNewJsonObject(helper);
+					jsonArray.put(jsonObject2);
 					
 				}
 			}
-			
 			readerB.close();
 			reader.close();
 			return jsonArray; 
